@@ -182,7 +182,7 @@
     <span class="sparkle">&#10024;</span>
     <span>
       <strong>AI-Assisted</strong> — Dataset completed by AI agent.
-      <strong>14 of 17</strong> fields auto-filled with citations.
+      <strong>15 of 20</strong> fields auto-filled with citations.
       <a href="#">View SOP compliance report &rarr;</a>
     </span>
   </div>
@@ -215,8 +215,8 @@
           <div class="field-label-row">
             <span class="field-label">Policy Issuer</span>
             <div class="field-meta">
-              <span class="confidence-badge confidence-high">HIGH</span>
-              <span class="sop-badge sop-pass">&#10003; PASS</span>
+              <span class="confidence-badge confidence-med">MED</span>
+              <span class="sop-badge sop-flag">&#9888; FLAG</span>
             </div>
           </div>
           <div class="field-value">Farmers Mutual Fire Insurance Company Of Salem County</div>
@@ -226,7 +226,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-issuer">
             <div class="reasoning-title">&#10024; AI Reasoning — Policy Issuer</div>
-            <div class="reasoning-text">Extracted from the <strong>"COMPANY NAME AND ADDRESS"</strong> field in the ACORD 28 form header. The full company name is clearly printed. Cross-referenced with NAIC database — this is a valid, active insurance carrier licensed in New Jersey.<br><br><strong>Confidence: 98%</strong> — Direct extraction from a standard labeled field.</div>
+            <div class="reasoning-text">Identified in the Company Name and Address box (top right) of the ACORD 28 form — the national/regional carrier underwriting the risk.<br><br><strong>&#9888; Flag:</strong> No NAIC number was provided on the form and the financial stability rating (&gt;A requirement per SOP) has not been verified.<br><br><strong>Confidence: Medium</strong> — Carrier name extracted but rating unverified.</div>
           </div>
         </div>
 
@@ -266,7 +266,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-insured">
             <div class="reasoning-title">&#10024; AI Reasoning — Named Insured</div>
-            <div class="reasoning-text">Extracted from the <strong>"NAMED INSURED AND ADDRESS"</strong> section. Entity name matches the borrower on file. Note: Page 2 lists <strong>"PH Apartments LLC"</strong> as an additional named insured — appears to be a related entity under the same policy.<br><br><strong>Confidence: 97%</strong> — Primary insured clearly identified and matches loan records.</div>
+            <div class="reasoning-text">Primary named insured on the ACORD 28 Page 1. Note: Page 2 Additional Remarks Schedule also lists <strong>"PH Apartments LLC"</strong> as Named Insured — may be a parent or alternate entity. Both should be verified against the borrowing entity in the loan file.<br><br><strong>Confidence: High</strong> — Direct extraction from labeled field.</div>
           </div>
         </div>
 
@@ -275,18 +275,18 @@
           <div class="field-label-row">
             <span class="field-label">Policy Type</span>
             <div class="field-meta">
-              <span class="confidence-badge confidence-med">MED</span>
-              <span class="sop-badge sop-flag">&#9888; FLAG</span>
+              <span class="confidence-badge confidence-high">HIGH</span>
+              <span class="sop-badge sop-pass">&#10003; PASS</span>
             </div>
           </div>
-          <div class="field-value">Landlords</div>
+          <div class="field-value">Other</div>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             <span class="citation-card" onclick="highlightDoc('doc-policytype')">&#128196; Page 1 — "Package"</span>
             <button class="ai-info-btn" onclick="toggleReasoning('policytype', this)">&#10024; AI Reasoning</button>
           </div>
           <div class="ai-reasoning-panel" id="reasoning-policytype">
             <div class="reasoning-title">&#10024; AI Reasoning — Policy Type</div>
-            <div class="reasoning-text">The ACORD form lists policy type as <strong>"Package"</strong>, a general classification. Based on coverage structure (commercial property, business income with rental value, replacement cost, ordinance or law) and property type (multi-unit rental), this has been categorized as <strong>"Landlords"</strong>.<br><br><strong>&#9888; Flag:</strong> Document says "Package" but derived classification is "Landlords." Manual review recommended.<br><br><strong>Confidence: 72%</strong> — Inferred classification, not direct extraction.</div>
+            <div class="reasoning-text">Policy type is listed as <strong>"Package"</strong> on the ACORD 28 form. This is a commercial package policy with SPECIAL perils form. It does not map to Builders Risk, Standard Dwelling, or Landlords — maps to <strong>"Other"</strong> per schema enum.<br><br><strong>Confidence: High</strong> — Direct extraction from labeled field.</div>
           </div>
         </div>
 
@@ -355,7 +355,7 @@
           <div class="field-label-row">
             <span class="field-label">Renewal Policy Expiration Date</span>
             <div class="field-meta">
-              <span class="confidence-badge confidence-med">MED</span>
+              <span class="confidence-badge confidence-high">HIGH</span>
               <span class="sop-badge sop-pass">&#10003; PASS</span>
             </div>
           </div>
@@ -365,7 +365,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-renewal">
             <div class="reasoning-title">&#10024; AI Reasoning — Renewal Policy Expiration Date</div>
-            <div class="reasoning-text">No renewal information found. "THIS REPLACES PRIOR EVIDENCE DATED" field is blank. No indication of renewal term beyond 09/06/2026.<br><br><strong>Confidence: 80%</strong> — Absence of data confirmed; field left empty per SOP.</div>
+            <div class="reasoning-text">No renewal policy found in the document. The 'THIS REPLACES PRIOR EVIDENCE DATED' field is blank, confirming this is not a renewal. Field correctly left empty per SOP.<br><br><strong>Confidence: HIGH</strong> — Clear absence of renewal information confirmed.</div>
           </div>
         </div>
 
@@ -377,7 +377,7 @@
             <span class="field-label">Coverage Amount</span>
             <div class="field-meta">
               <span class="confidence-badge confidence-high">HIGH</span>
-              <span class="sop-badge sop-flag">&#9888; FLAG</span>
+              <span class="sop-badge sop-pass">&#10003; PASS</span>
             </div>
           </div>
           <div class="field-value">$ 75,000</div>
@@ -387,7 +387,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-coverage">
             <div class="reasoning-title">&#10024; AI Reasoning — Coverage Amount</div>
-            <div class="reasoning-text">Extracted from <strong>"COMMERCIAL PROPERTY COVERAGE AMOUNT OF INSURANCE: $ 75,000"</strong>.<br><br><strong>&#9888; Flag:</strong> Coverage of $75,000 appears low relative to property value. Per SOP, commercial property coverage should meet or exceed the loan amount. Recommend underwriter review.<br><br><strong>Confidence: 98%</strong> — Direct extraction from labeled field.</div>
+            <div class="reasoning-text">Commercial property coverage amount shown in the Amount of Insurance field on Page 1. Note: This is a blanket policy covering 10 properties — the $75,000 may be per-location or aggregate. Clarification may be needed.<br><br><strong>Confidence: High</strong> — Direct extraction from labeled field.</div>
           </div>
         </div>
 
@@ -407,7 +407,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-deductible">
             <div class="reasoning-title">&#10024; AI Reasoning — Deductible</div>
-            <div class="reasoning-text">Extracted from <strong>"DED: 2,500"</strong> adjacent to coverage amount. Within standard acceptable range for commercial property insurance.<br><br><strong>Confidence: 97%</strong> — Direct extraction.</div>
+            <div class="reasoning-text">Standard/AOP deductible is $2,500. Ordinance or Law sub-coverage deductibles are also $2,500 each. All deductibles are equal at $2,500, so the highest deductible is <strong>$2,500</strong> per SOP rule.<br><br><strong>Confidence: High</strong> — Direct extraction, SOP rule applied.</div>
           </div>
         </div>
 
@@ -427,7 +427,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-bizincome">
             <div class="reasoning-title">&#10024; AI Reasoning — Business Interruption Insurance Amount</div>
-            <div class="reasoning-text">Extracted from <strong>"BUSINESS INCOME"</strong> row: "If YES, LIMIT: 192,000". Checkbox marked YES with Rental Value selected — appropriate for a landlord policy covering rental income loss.<br><br><strong>Confidence: 96%</strong> — Direct extraction from coverage table.</div>
+            <div class="reasoning-text">Business Income coverage is selected (YES checked) with a limit of <strong>$192,000</strong> on an Actual Loss Sustained basis. This maps to businessInterruptionInsuranceAmount.<br><br><strong>Confidence: High</strong> — Direct extraction from coverage table.</div>
           </div>
         </div>
 
@@ -440,14 +440,14 @@
               <span class="sop-badge sop-pass">&#10003; PASS</span>
             </div>
           </div>
-          <div class="field-value">Yes</div>
+          <div class="field-value empty-val">Not provided (null)</div>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-            <span class="citation-card" onclick="highlightDoc('doc-replacement')">&#128196; Page 1 — "REPLACEMENT COST"</span>
+            <span class="citation-card" onclick="highlightDoc('doc-replacement')">&#128196; Page 1 — "REPLACEMENT COST: YES"</span>
             <button class="ai-info-btn" onclick="toggleReasoning('replacement', this)">&#10024; AI Reasoning</button>
           </div>
           <div class="ai-reasoning-panel" id="reasoning-replacement">
             <div class="reasoning-title">&#10024; AI Reasoning — Replacement Cost</div>
-            <div class="reasoning-text">The <strong>"REPLACEMENT COST"</strong> row has a checked mark in the YES column. Meets SOP requirement for commercial property policies.<br><br><strong>Confidence: 95%</strong> — Checkbox clearly marked.</div>
+            <div class="reasoning-text">Replacement Cost is checked <strong>YES</strong> on the policy, but this indicates the <strong>loss valuation method</strong> (replacement cost vs. actual cash value), NOT a standalone Replacement Cost Estimator (RCE) report.<br><br>Per SOP, do not use policy endorsement language as a proxy for RCE value. No standalone RCE document was provided. Set to <strong>null</strong>.<br><br><strong>Confidence: High</strong> — Correct interpretation per SOP guidelines.</div>
           </div>
         </div>
 
@@ -456,8 +456,8 @@
           <div class="field-label-row">
             <span class="field-label">Amount Due At Closing</span>
             <div class="field-meta">
-              <span class="confidence-badge confidence-med">MED</span>
-              <span class="sop-badge sop-pass">&#10003; PASS</span>
+              <span class="confidence-badge confidence-low">LOW</span>
+              <span class="sop-badge sop-flag">&#9888; FLAG</span>
             </div>
           </div>
           <div class="field-value">$ 0</div>
@@ -466,7 +466,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-amtclosing">
             <div class="reasoning-title">&#10024; AI Reasoning — Amount Due At Closing</div>
-            <div class="reasoning-text">No specific amount due at closing stated. Policy effective date (09/06/2025) precedes expected closing, indicating premium already paid for current term.<br><br><strong>Confidence: 75%</strong> — Inferred from policy timing; not directly stated.</div>
+            <div class="reasoning-text">No invoice, receipt, or agent email confirming payment status is present in this document. Per SOP, when payment status is ambiguous, set amountDueAtClosing to <strong>0</strong> and premiumCollectedAtEscrow to <strong>false</strong>, and flag for review.<br><br><strong>Confidence: Low</strong> — Payment status ambiguous; default value applied per SOP.</div>
           </div>
         </div>
 
@@ -494,8 +494,8 @@
           <div class="field-label-row">
             <span class="field-label">Premium Collected At Escrow</span>
             <div class="field-meta">
-              <span class="confidence-badge confidence-med">MED</span>
-              <span class="sop-badge sop-pass">&#10003; PASS</span>
+              <span class="confidence-badge confidence-low">LOW</span>
+              <span class="sop-badge sop-flag">&#9888; FLAG</span>
             </div>
           </div>
           <div class="field-value">No</div>
@@ -504,7 +504,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-escrow">
             <div class="reasoning-title">&#10024; AI Reasoning — Premium Collected At Escrow</div>
-            <div class="reasoning-text">No escrow collection instructions found. Policy appears direct-billed based on agency arrangement. Setting to <strong>"No"</strong> as default.<br><br><strong>Confidence: 70%</strong> — Default value applied; not explicitly stated.</div>
+            <div class="reasoning-text">Derived from amountDueAtClosing = 0. Payment status is ambiguous — no invoice or receipt provided. Per SOP, set to <strong>false</strong> when amountDueAtClosing = 0 due to ambiguity.<br><br><strong>Confidence: Low</strong> — Default value applied per SOP rule.</div>
           </div>
         </div>
 
@@ -526,7 +526,7 @@
           </div>
           <div class="ai-reasoning-panel" id="reasoning-agency">
             <div class="reasoning-title">&#10024; AI Reasoning — Insurance Agency</div>
-            <div class="reasoning-text">Extracted from <strong>"PRODUCER NAME, CONTACT PERSON AND ADDRESS"</strong>. Agency: Creative Insurance Group, contact: Rose Horovitz, phone: (732) 466-3726.<br><br><strong>Confidence: 99%</strong> — Direct extraction from labeled producer field.</div>
+            <div class="reasoning-text">Clearly identified in the Producer/Agency box at top left of ACORD 28 form. This is the local agency that wrote/sold the policy. Agent: <strong>Rose Horovitz</strong>.<br><br><strong>Confidence: High</strong> — Direct extraction from labeled producer field.</div>
           </div>
         </div>
 
@@ -564,18 +564,18 @@
           <div class="field-label-row">
             <span class="field-label">Mortgagee Clause Address</span>
             <div class="field-meta">
-              <span class="confidence-badge confidence-med">MED</span>
+              <span class="confidence-badge confidence-low">LOW</span>
               <span class="sop-badge sop-flag">&#9888; FLAG</span>
             </div>
           </div>
-          <div class="field-value">1000 2nd Ave, Suite 2500, Seattle, WA 98104</div>
+          <div class="field-value empty-val">Not found in document</div>
           <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
             <span class="citation-card" onclick="highlightDoc('doc-mortgagee')">&#128196; Page 1 — "BCC/ST LLC ISAOA/ATIMA"</span>
             <button class="ai-info-btn" onclick="toggleReasoning('mortgagee', this)">&#10024; AI Reasoning</button>
           </div>
           <div class="ai-reasoning-panel" id="reasoning-mortgagee">
             <div class="reasoning-title">&#10024; AI Reasoning — Mortgagee Clause Address</div>
-            <div class="reasoning-text">Document lists mortgagee as <strong>"BCC/ST LLC ISAOA/ATIMA, 50 Park Pl, Suite 301, Newark NJ 07102"</strong>. However, the standard mortgagee clause address per internal records is <strong>"1000 2nd Ave, Suite 2500, Seattle, WA 98104"</strong>.<br><br><strong>&#9888; Flag:</strong> Mortgagee address on certificate (Newark, NJ) does not match required clause address (Seattle, WA). An updated certificate may need to be requested.<br><br><strong>Confidence: 65%</strong> — Document shows different address than required. Using internal standard, flagging for review.</div>
+            <div class="reasoning-text">The document lists a mortgagee (<strong>"BCC/ST LLC ISAOA/ATIMA, 50 Park Pl, Suite 301, Newark NJ 07102"</strong>), but this does not match the required mortgagee clause address format per SOP. The mortgagee clause address field requires the specific clause language, which was not found in this document. Set to <strong>null</strong>.<br><br><strong>Confidence: Low</strong> — Required data not present in document.</div>
           </div>
         </div>
 
