@@ -593,8 +593,12 @@
     }
   }
 
-  // Normalize text for fuzzy OCR matching
+  // Normalize text for fuzzy OCR matching (preserves spaces for readability/logging)
   function norm(s) { return s.toLowerCase().replace(/[^a-z0-9.,$/% ]/g, '').replace(/\s+/g, ' ').trim(); }
+
+  // Compact normalization: strip everything except alphanumeric for edit distance comparison
+  // This ensures hyphens, spaces, punctuation don't inflate distance (e.g. "879 7 220" vs "879j220")
+  function compact(s) { return s.toLowerCase().replace(/[^a-z0-9]/g, ''); }
 
   // Levenshtein edit distance
   function editDistance(a, b) {
@@ -618,17 +622,18 @@
   // Find the best sliding window of OCR words matching search text
   // Uses edit distance: ≤2 is a strong match, also allows proportional fuzzy for longer strings
   function findBestWindow(ocrWords, searchText) {
-    const searchNorm = norm(searchText);
-    const searchLen = searchNorm.length;
-    const searchWordCount = searchNorm.split(' ').length;
+    const searchCompact = compact(searchText);
+    const searchLen = searchCompact.length;
+    const searchWordCount = norm(searchText).split(' ').length;
     const minWin = Math.max(1, searchWordCount - 2);
     const maxWin = Math.min(ocrWords.length, searchWordCount + 4);
     let bestDist = Infinity, bestStart = -1, bestEnd = -1;
 
     for (let winSize = minWin; winSize <= maxWin; winSize++) {
       for (let i = 0; i <= ocrWords.length - winSize; i++) {
-        const windowText = norm(ocrWords.slice(i, i + winSize).map(w => w.text).join(' '));
-        const dist = editDistance(windowText, searchNorm);
+        const windowRaw = ocrWords.slice(i, i + winSize).map(w => w.text).join(' ');
+        const windowCompact = compact(windowRaw);
+        const dist = editDistance(windowCompact, searchCompact);
         // Accept if within 2 edits, or for longer strings allow proportional tolerance
         const threshold = Math.max(2, Math.floor(searchLen * 0.15));
         if (dist < bestDist && dist <= threshold) {
