@@ -596,39 +596,49 @@
   // Normalize text for fuzzy OCR matching
   function norm(s) { return s.toLowerCase().replace(/[^a-z0-9.,$/% ]/g, '').replace(/\s+/g, ' ').trim(); }
 
-  // Similarity score: ratio of matching characters (order-preserving)
-  function similarity(a, b) {
-    if (!a || !b) return 0;
-    const shorter = a.length <= b.length ? a : b;
-    const longer = a.length > b.length ? a : b;
-    let matches = 0, j = 0;
-    for (let i = 0; i < longer.length && j < shorter.length; i++) {
-      if (longer[i] === shorter[j]) { matches++; j++; }
+  // Levenshtein edit distance
+  function editDistance(a, b) {
+    if (!a || !b) return Math.max((a||'').length, (b||'').length);
+    const m = a.length, n = b.length;
+    // Optimize: if length difference alone exceeds threshold, skip full computation
+    if (Math.abs(m - n) > 5) return Math.abs(m - n);
+    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1));
+    for (let i = 0; i <= m; i++) dp[i][0] = i;
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    for (let i = 1; i <= m; i++) {
+      for (let j = 1; j <= n; j++) {
+        dp[i][j] = a[i-1] === b[j-1]
+          ? dp[i-1][j-1]
+          : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+      }
     }
-    return matches / longer.length;
+    return dp[m][n];
   }
 
   // Find the best sliding window of OCR words matching search text
+  // Uses edit distance: ≤2 is a strong match, also allows proportional fuzzy for longer strings
   function findBestWindow(ocrWords, searchText) {
     const searchNorm = norm(searchText);
+    const searchLen = searchNorm.length;
     const searchWordCount = searchNorm.split(' ').length;
-    // Try windows of varying sizes around expected word count
     const minWin = Math.max(1, searchWordCount - 2);
     const maxWin = Math.min(ocrWords.length, searchWordCount + 4);
-    let bestScore = 0, bestStart = -1, bestEnd = -1;
+    let bestDist = Infinity, bestStart = -1, bestEnd = -1;
 
     for (let winSize = minWin; winSize <= maxWin; winSize++) {
       for (let i = 0; i <= ocrWords.length - winSize; i++) {
         const windowText = norm(ocrWords.slice(i, i + winSize).map(w => w.text).join(' '));
-        const score = similarity(windowText, searchNorm);
-        if (score > bestScore && score >= 0.55) {
-          bestScore = score;
+        const dist = editDistance(windowText, searchNorm);
+        // Accept if within 2 edits, or for longer strings allow proportional tolerance
+        const threshold = Math.max(2, Math.floor(searchLen * 0.15));
+        if (dist < bestDist && dist <= threshold) {
+          bestDist = dist;
           bestStart = i;
           bestEnd = i + winSize - 1;
         }
       }
     }
-    return { bestScore, bestStart, bestEnd };
+    return { bestDist, bestStart, bestEnd };
   }
 
   // Compute union bounding box for a range of OCR words
@@ -721,13 +731,13 @@
           }
         }
 
-        // Strategy 2: Fuzzy sliding window match
-        const { bestScore, bestStart, bestEnd } = findBestWindow(ocrWords, item.search);
+        // Strategy 2: Fuzzy sliding window match (edit distance ≤ 2, or ≤ 15% of search length)
+        const { bestDist, bestStart, bestEnd } = findBestWindow(ocrWords, item.search);
         if (bestStart >= 0) {
           const bb = unionBbox(ocrWords, bestStart, bestEnd);
           addHL(wrapper, item.id, bb.x0-4, bb.y0-3, bb.x1-bb.x0+8, bb.y1-bb.y0+6);
           resolvedHighlights[item.id] = { page: pageNum, docKey: currentDoc };
-          console.log('Citation [' + item.id + '] fuzzy match (score=' + bestScore.toFixed(2) + ') at words', bestStart, '-', bestEnd,
+          console.log('Citation [' + item.id + '] fuzzy match (editDist=' + bestDist + ') at words', bestStart, '-', bestEnd,
             ':', ocrWords.slice(bestStart, bestEnd+1).map(w=>w.text).join(' '));
           continue;
         }
